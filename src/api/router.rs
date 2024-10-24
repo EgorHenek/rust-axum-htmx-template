@@ -6,7 +6,7 @@ use crate::{
     state::SharedState,
 };
 
-use super::{health::health_check_handler, middlewares::cache_control, robots::robots};
+use super::{middlewares::cache_control, robots::robots};
 use axum::{
     middleware,
     routing::{get, post},
@@ -15,7 +15,6 @@ use axum::{
 
 pub fn create_router() -> Router<SharedState> {
     Router::new()
-        .route("/_healthz", get(health_check_handler))
         .route(
             "/variants/add",
             post(create_variant_command).get(create_variant_form_query),
