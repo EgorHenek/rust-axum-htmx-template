@@ -1,8 +1,5 @@
 use crate::{
-    application::{
-        commands::create_variant_command::create_variant_command,
-        quiries::create_variant_form_query::create_variant_form_query,
-    },
+    api::controllers::variant_controller::{create_variant, create_variant_form},
     state::SharedState,
 };
 
@@ -16,7 +13,7 @@ pub fn create_router() -> Router<SharedState> {
     Router::new()
         .route(
             "/variants/add",
-            post(create_variant_command).get(create_variant_form_query),
+            post(create_variant).get(create_variant_form),
         )
         .route("/robots.txt", get(robots))
 }

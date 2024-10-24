@@ -1,1 +1,1 @@
-pub mod create_variant_command;
+pub mod create_variant;

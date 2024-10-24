@@ -3,6 +3,7 @@ use serde::Serialize;
 use crate::asset_cache::SharedAssetCache;
 
 pub mod assets;
+mod controllers;
 pub mod middlewares;
 mod robots;
 pub mod router;
