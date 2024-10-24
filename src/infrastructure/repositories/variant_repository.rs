@@ -1,7 +1,9 @@
+use mockall::automock;
 use sqlx::SqlitePool;
 
 use crate::{domain::models::variant::Variant, errors::AppError};
 
+#[automock]
 pub trait VariantRepository {
     fn create_variant(
         &self,

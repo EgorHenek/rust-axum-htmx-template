@@ -15,9 +15,8 @@ use asset_cache::AssetCache;
 use axum::routing::get;
 use axum::{middleware, Router};
 use config::{Config, ConfigError};
-use errors::AppError;
 use metrics_exporter_prometheus::{Matcher, PrometheusBuilder, PrometheusHandle};
-use minijinja::{path_loader, Environment};
+use putin_bingo::{import_templates, leak_alloc};
 use serde::Deserialize;
 use sqlx::SqlitePool;
 use state::AppState;
@@ -32,10 +31,6 @@ struct AppConfig {
     port: usize,
     metrics_port: usize,
     db_url: String,
-}
-
-pub fn leak_alloc<T>(value: T) -> &'static T {
-    Box::leak(Box::new(value))
 }
 
 fn load_config() -> Result<&'static AppConfig, ConfigError> {
@@ -117,14 +112,6 @@ async fn main() {
 
     let (_main_server, _metrics_server) =
         tokio::join!(start_main_server(config), start_metrics_server(config));
-}
-
-fn import_templates() -> Result<Environment<'static>, AppError> {
-    let mut env = Environment::new();
-
-    env.set_loader(path_loader("templates"));
-
-    Ok(env)
 }
 
 async fn shutdown_signal() {

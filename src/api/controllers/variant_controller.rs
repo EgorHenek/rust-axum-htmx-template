@@ -6,7 +6,7 @@ use axum::{
 };
 use axum_htmx::HxBoosted;
 use minijinja::context;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::{
     application::commands::create_variant::handler::{CreateVariantCommand, CreateVariantHandler},
@@ -15,9 +15,9 @@ use crate::{
     state::SharedState,
 };
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize)]
 pub struct CreateVariantRequest {
-    title: String,
+    pub title: String,
 }
 
 pub async fn create_variant(
