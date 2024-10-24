@@ -1,12 +1,18 @@
 {% from "macros/input.html.jinja" import input %}
+{% from "macros/button.html.jinja" import button %}
 {% extends "_base.html.jinja" if base is defined else "_partial.html.jinja" %}
 {% block main %}
 
-{{ input(
-    type="text",
-    placeholder="Текст",
-    name="title",
-    required=true,
-) }}
+<div id="form-container">
+    <form hx-swap="beforebegin" hx-target="this" hx-post="/variants/add" hx-on::after-request="this.reset()">
+        {{ input(
+            type="text",
+            placeholder="Текст",
+            name="title",
+            required=true,
+        ) }}
+        {{ button("green", "Отправить", "submit")}}
+    </form>
+</div>
 
 {% endblock %}

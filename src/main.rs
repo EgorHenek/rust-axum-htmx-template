@@ -19,6 +19,7 @@ use errors::AppError;
 use metrics_exporter_prometheus::{Matcher, PrometheusBuilder, PrometheusHandle};
 use minijinja::{path_loader, Environment};
 use serde::Deserialize;
+use sqlx::SqlitePool;
 use state::AppState;
 use tokio::{net::TcpListener, signal};
 use tower_http::timeout::TimeoutLayer;
@@ -30,6 +31,7 @@ struct AppConfig {
     host: String,
     port: usize,
     metrics_port: usize,
+    db_url: String,
 }
 
 pub fn leak_alloc<T>(value: T) -> &'static T {
@@ -41,6 +43,7 @@ fn load_config() -> Result<&'static AppConfig, ConfigError> {
         .set_default("host", "127.0.0.1")?
         .set_default("port", "3000")?
         .set_default("metrics_port", "3001")?
+        .set_default("db_url", "sqlite:./db.sqlite")?
         .add_source(config::Environment::default())
         .build()?;
     let config = config.try_deserialize::<AppConfig>()?;
@@ -61,10 +64,12 @@ async fn start_main_server(config: &'static AppConfig) {
     let assets = leak_alloc(AssetCache::load_files().await);
     let env = import_templates().unwrap();
     let base_template_data = leak_alloc(BaseTemplateData::new(assets));
+    let db_pool = SqlitePool::connect(config.db_url.as_str()).await.unwrap();
     let state = leak_alloc(AppState {
         assets,
         env,
         base_template_data,
+        db_pool,
     });
 
     let app = create_router()
