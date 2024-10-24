@@ -1,9 +1,7 @@
 use std::collections::HashMap;
 
-use async_compression::tokio::write::BrotliEncoder;
 use axum::extract::Path;
 use bytes::Bytes;
-use tokio::io::AsyncWriteExt;
 
 /// A shared reference to the static asset cache.
 pub type SharedAssetCache = &'static AssetCache;
@@ -63,11 +61,8 @@ impl AssetCache {
             })
             .collect();
 
-        for (stored_path, bytes, ext, filename) in assets {
-            let contents = match ext.as_str() {
-                "css" | "js" => compress_data(&bytes).await.unwrap_or_default(),
-                _ => bytes.into(),
-            };
+        for (stored_path, bytes, _ext, filename) in assets {
+            let contents = bytes.into();
 
             cache.insert(
                 Self::get_cache_key(&filename),
@@ -125,14 +120,4 @@ impl StaticAsset {
             _ => "text/plain",
         }
     }
-}
-
-async fn compress_data(bytes: &[u8]) -> Result<Bytes, std::io::Error> {
-    let mut encoder =
-        BrotliEncoder::with_quality(Vec::new(), async_compression::Level::Precise(11));
-
-    encoder.write_all(bytes).await?;
-    encoder.shutdown().await?;
-
-    Ok(Bytes::from(encoder.into_inner()))
 }
