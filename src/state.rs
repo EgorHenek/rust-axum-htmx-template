@@ -1,6 +1,7 @@
 use axum::response::Html;
 use axum_htmx::HxBoosted;
 use minijinja::{context, Value};
+use sqlx::{Pool, Sqlite};
 
 use crate::{api::SharedBaseTemplateData, asset_cache::SharedAssetCache, errors::AppError};
 
@@ -11,6 +12,7 @@ pub struct AppState {
     pub assets: SharedAssetCache,
     pub env: minijinja::Environment<'static>,
     pub base_template_data: SharedBaseTemplateData,
+    pub db_pool: Pool<Sqlite>,
 }
 
 impl AppState {

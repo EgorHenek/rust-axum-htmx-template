@@ -4,6 +4,7 @@ use axum::{
 };
 use minijinja::Error as MinijinjaError;
 // use sqlx::error::Error as SqlxError;
+use sqlx::Error as SqlxError;
 use std::{io::Error as IOError, string::FromUtf8Error};
 use thiserror::Error;
 
@@ -21,6 +22,9 @@ pub enum AppError {
 
     #[error("Error convert from UTF-8: {0}")]
     Utf8Error(#[from] FromUtf8Error),
+
+    #[error("Database error: {0}")]
+    DatabaseError(#[from] SqlxError),
 }
 
 impl IntoResponse for AppError {

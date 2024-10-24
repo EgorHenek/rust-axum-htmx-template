@@ -14,6 +14,14 @@ metrics = "0"
 metrics-exporter-prometheus = "0"
 minijinja = { version = "2", features = ["loader"] }
 serde = { version = "1", features = ["derive"] }
+sqlx = { version = "0.8", features = [
+  "runtime-tokio",
+  "macros",
+  "sqlite",
+  "migrate",
+  "uuid",
+  "chrono",
+] }
 thiserror = "1"
 tokio = { version = "1", features = ["net", "rt-multi-thread", "signal"] }
 tower-http = { version = "0", features = [
