@@ -21,10 +21,8 @@ use minijinja::{path_loader, Environment};
 use serde::Deserialize;
 use state::AppState;
 use tokio::{net::TcpListener, signal};
-use tower_http::compression::predicate::SizeAbove;
+use tower_http::timeout::TimeoutLayer;
 use tower_http::trace::TraceLayer;
-use tower_http::CompressionLevel;
-use tower_http::{compression::CompressionLayer, timeout::TimeoutLayer};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 #[derive(Debug, Deserialize)]
@@ -76,11 +74,6 @@ async fn start_main_server(config: &'static AppConfig) {
             TraceLayer::new_for_http(),
             TimeoutLayer::new(Duration::from_secs(10)),
         ))
-        .layer(
-            CompressionLayer::new()
-                .quality(CompressionLevel::Precise(4))
-                .compress_when(SizeAbove::new(512)),
-        )
         .route_layer(middleware::from_fn(middlewares::track_metrics));
 
     let listener = TcpListener::bind((config.host.as_str(), config.port as u16))
