@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport"
+            content="width=device-width, height=device-height, initial-scale=1.0" />
+
+        <meta name="htmx-config" content='{"globalViewTransitions": "true" }' />
+
+        <link rel="icon" href="data:,">
+
+        <link rel="stylesheet" href="/{{ base.styles }}" />
+        <script defer src="/{{ base.scripts }}"></script>
+
+        <title>Бинго!</title>
+    </head>
+
+    <body
+        class="bg-light-primary text-light-secondary transition dark:bg-dark-primary dark:text-dark-secondary">
+
+        <main class="flex flex-col items-center gap-2">
+            {% block main %} {% endblock %}
+        </main>
+    </body>
+
+</html>
