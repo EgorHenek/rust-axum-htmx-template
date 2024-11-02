@@ -1,12 +1,11 @@
 [package]
-name = "putin-bingo"
+name = "bingo"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
 axum = { version = "0.7", features = ["tracing"] }
 axum-htmx = "0"
-async-compression = { version = "0", features = ["tokio", "brotli"] }
 bytes = "1"
 config = "0"
 chrono = { version = "0", features = ["serde"] }

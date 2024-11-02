@@ -9,10 +9,10 @@ use minijinja::context;
 use serde::{Deserialize, Serialize};
 
 use crate::{
+    api::state::SharedState,
     application::commands::create_variant::handler::{CreateVariantCommand, CreateVariantHandler},
     errors::AppError,
     infrastructure::repositories::variant_repository::SqliteVariantRepository,
-    state::SharedState,
 };
 
 #[derive(Deserialize, Serialize)]

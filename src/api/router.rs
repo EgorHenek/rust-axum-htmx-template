@@ -1,9 +1,6 @@
-use crate::{
-    api::controllers::variant_controller::{create_variant, create_variant_form},
-    state::SharedState,
-};
+use crate::api::controllers::variant_controller::{create_variant, create_variant_form};
 
-use super::robots::robots;
+use super::{robots::robots, state::SharedState};
 use axum::{
     routing::{get, post},
     Router,

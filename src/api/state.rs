@@ -3,16 +3,18 @@ use axum_htmx::HxBoosted;
 use minijinja::{context, Value};
 use sqlx::{Pool, Sqlite};
 
-use crate::{api::SharedBaseTemplateData, asset_cache::SharedAssetCache, errors::AppError};
+use crate::{api::SharedBaseTemplateData, errors::AppError};
+
+use super::asset_cache::SharedAssetCache;
 
 pub type SharedState = &'static AppState;
 
 #[derive(Clone)]
 pub struct AppState {
     pub assets: SharedAssetCache,
-    pub env: minijinja::Environment<'static>,
     pub base_template_data: SharedBaseTemplateData,
     pub db_pool: Pool<Sqlite>,
+    pub env: minijinja::Environment<'static>,
 }
 
 impl AppState {
