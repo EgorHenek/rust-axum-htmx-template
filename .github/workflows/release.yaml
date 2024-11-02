@@ -1,0 +1,206 @@
+name: Create release
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+  packages: write
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Semver release
+        id: release
+        uses: oknozor/cocogitto-action@v3
+        with:
+          release: true
+          git-user: "github-actions[bot]"
+          git-user-email: "github-actions[bot]@users.noreply.github.com"
+      - name: Generate Changelog
+        run: cog changelog --at ${{ steps.release.outputs.version }} -t full_hash > GITHUB_CHANGELOG.md
+      - name: Upload github release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: GITHUB_CHANGELOG.md
+          tag_name: ${{ steps.release.outputs.version }}
+  publish-linux:
+    name: Publish binary for Linux ${{ matrix.arch }}
+    needs: create-release
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        arch:
+          - arm64
+          - amd64
+        include:
+          - arch: arm64
+            target: aarch64-unknown-linux-gnu
+            asset_name: ${{ github.event.repository.name }}-linux-arm64
+          - arch: amd64
+            target: x86_64-unknown-linux-gnu
+            asset_name: ${{ github.event.repository.name }}-linux-amd64
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          target: ${{ matrix.target }}
+      - name: Install gcc-aarch64-linux-gnu
+        if: matrix.arch == 'arm64'
+        run: sudo apt-get -y install gcc-aarch64-linux-gnu
+      - name: Cache cargo registry
+        uses: Swatinem/rust-cache@v2
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install js dependencies
+        run: bun install
+      - name: Build
+        run: cargo build --release --locked --target ${{ matrix.target }}
+      - name: Package
+        shell: bash
+        run: |
+          cd target/${{ matrix.target }}/release
+          tar czvf ../../../pages-meta-${{ matrix.target }}.tar.gz ${{ github.event.repository.name }}
+          cd -
+      - name: Upload Release Asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ github.ref_name }} ${{ github.event.repository.name }}-${{ matrix.target }}.tar.gz --repo ${{ github.repository }}
+  publish-windows:
+    name: Publish binary for Windows ${{ matrix.arch }}
+    needs: create-release
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        arch:
+          - arm64
+          - amd64
+        include:
+          - arch: amd64
+            target: x86_64-pc-windows-msvc
+            asset_name: ${{ github.event.repository.name }}-windows-amd64.exe
+          - arch: arm64
+            target: aarch64-pc-windows-msvc
+            asset_name: ${{ github.event.repository.name }}-windows-arm64.exe
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          target: ${{ matrix.target }}
+      - name: Cache cargo registry
+        uses: Swatinem/rust-cache@v2
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install js dependencies
+        run: bun install
+      - name: Build
+        run: cargo build --release --locked --target ${{ matrix.target }}
+      - name: Package
+        shell: bash
+        run: |
+          cd target/${{ matrix.target }}/release
+          7z a ../../../pages-meta-${{ matrix.target }}.zip ${{ github.event.repository.name }}.exe
+          cd -
+      - name: Upload Release Asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ github.ref_name }} ${{ github.event.repository.name }}-${{ matrix.target }}.zip --repo ${{ github.repository }}
+  publish-macos:
+    name: Publish binary for macOS ${{ matrix.arch }}
+    needs: create-release
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-13
+          - macos-14
+        include:
+          - os: macos-13
+            target: x86_64-apple-darwin
+            arch: amd64
+          - os: macos-14
+            target: aarch64-apple-darwin
+            arch: arm64
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Cache cargo registry
+        uses: Swatinem/rust-cache@v2
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install js dependencies
+        run: bun install
+      - name: Build
+        run: cargo build --release --locked
+      - name: Package
+        shell: bash
+        run: |
+          cd target/release
+          tar czvf ../../${{ github.event.repo.name }}-${{ matrix.target }}.tar.gz ${{ github.event.repository.name }}
+          cd -
+      - name: Upload Release Asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ github.ref_name }} ${{ github.event.repository.name }}-${{ matrix.target }}.tar.gz --repo ${{ github.repository }}
+  # publish-crate:
+  #   runs-on: ubuntu-latest
+  #   needs: create-release
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: dtolnay/rust-toolchain@stable
+  #     - uses: katyo/publish-crates@v2
+  #       with:
+  #         registry-token: ${{ secrets.CRATES_IO_TOKEN }}
+  build-and-push-container:
+    runs-on: ubuntu-latest
+    needs: create-release
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ghcr.io/${{ github.repository }}
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern=v{{version}}
+            type=semver,pattern=v{{major}}.{{minor}}
+            type=semver,pattern=v{{major}}
+            type=sha
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Login to Docker Hub
+      #   uses: docker/login-action@v3
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push container image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
