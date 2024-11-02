@@ -3,7 +3,9 @@ use axum::{
     response::{IntoResponse, Result},
 };
 
-use crate::{errors::AppError, state::SharedState};
+use crate::errors::AppError;
+
+use super::state::SharedState;
 
 pub async fn robots(state: State<SharedState>) -> Result<impl IntoResponse, AppError> {
     let asset = state

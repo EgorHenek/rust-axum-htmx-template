@@ -1,5 +1,5 @@
 {
-	"name": "putin-bingo",
+	"name": "bingo",
 	"type": "module",
 	"devDependencies": {
 		"@types/bun": "latest"

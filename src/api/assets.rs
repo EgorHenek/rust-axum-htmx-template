@@ -7,7 +7,7 @@ use axum::{
     Router,
 };
 
-use crate::state::SharedState;
+use super::state::SharedState;
 
 pub fn static_file_handler(state: SharedState) -> Router {
     Router::new()

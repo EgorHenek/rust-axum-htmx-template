@@ -1,13 +1,11 @@
 use axum::http::StatusCode;
 use axum_test::TestServer;
-use putin_bingo::{
+use bingo::{
     api::{
-        controllers::variant_controller::CreateVariantRequest, router::create_router,
-        BaseTemplateData,
+        asset_cache::AssetCache, controllers::variant_controller::CreateVariantRequest,
+        router::create_router, state::AppState, BaseTemplateData,
     },
-    asset_cache::AssetCache,
     import_templates, leak_alloc,
-    state::AppState,
 };
 use sqlx::SqlitePool;
 
