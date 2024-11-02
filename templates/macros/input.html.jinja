@@ -1,0 +1,25 @@
+{% macro input(
+    type="text",
+    placeholder="",
+    name="",
+    value="",
+    id="",
+    class="",
+    required=false,
+    disabled=false,
+    autofocus=false
+) %}
+<div class="w-full max-w-xs mx-auto">
+    <input
+        type="{{ type }}"
+        {% if placeholder %}placeholder="{{ placeholder }}"{% endif %}
+        {% if name %}name="{{ name }}"{% endif %}
+        {% if value %}value="{{ value }}"{% endif %}
+        {% if id %}id="{{ id }}"{% endif %}
+        {% if required %}required{% endif %}
+        {% if disabled %}disabled{% endif %}
+        {% if autofocus %}autofocus{% endif %}
+        class="flex w-full h-10 px-3 py-2 text-sm bg-white border rounded-md border-neutral-300 ring-offset-background placeholder:text-neutral-500 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50 {{ class }}"
+    />
+</div>
+{% endmacro %}

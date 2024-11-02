@@ -1,0 +1,26 @@
+[package]
+name = "putin-bingo"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = { version = "0.7", features = ["tracing"] }
+axum-htmx = "0"
+async-compression = { version = "0", features = ["tokio", "brotli"] }
+bytes = "1"
+config = "0"
+chrono = { version = "0", features = ["serde"] }
+minijinja = { version = "2", features = ["loader"] }
+serde = { version = "1", features = ["derive"] }
+thiserror = "1"
+tokio = { version = "1", features = ["net", "rt-multi-thread", "signal"] }
+tower-http = { version = "0", features = [
+  "trace",
+  "timeout",
+  "fs",
+  "compression-br",
+] }
+tracing = "0"
+tracing-subscriber = { version = "0", features = ["env-filter"] }
+validator = { version = "0.18", features = ["derive"] }
+uuid = { version = "1", features = ["v7", "fast-rng", "serde"] }

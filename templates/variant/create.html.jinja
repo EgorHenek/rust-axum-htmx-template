@@ -1,0 +1,12 @@
+{% from "macros/input.html.jinja" import input %}
+{% extends "_base.html.jinja" if base is defined else "_partial.html.jinja" %}
+{% block main %}
+
+{{ input(
+    type="text",
+    placeholder="Текст",
+    name="title",
+    required=true,
+) }}
+
+{% endblock %}

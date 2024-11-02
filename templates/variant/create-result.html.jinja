@@ -1,0 +1,7 @@
+{% import "macros/alert.html.jinja" as components %}
+
+{{ components.alert(
+    type="success",
+    title="Добавлено",
+    message="Ваш вариант успешно добавлен и появится (или нет) после модерации. Его ID: " ~ id
+) }}
