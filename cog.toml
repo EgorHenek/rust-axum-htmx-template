@@ -1,0 +1,20 @@
+ignore_merge_commits = false
+branch_whitelist = ["main"]
+skip_ci = "[skip ci]"
+skip_untracked = false
+pre_bump_hooks = []
+post_bump_hooks = []
+pre_package_bump_hooks = []
+post_package_bump_hooks = []
+
+[git_hooks]
+
+[commit_types]
+
+[changelog]
+path = "CHANGELOG.md"
+authors = [{ signature = "Egor Gluhih", username = "EgorHenek" }]
+
+[bump_profiles]
+
+[packages]
