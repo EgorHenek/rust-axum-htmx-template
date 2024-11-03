@@ -31,7 +31,7 @@ tower-http = { version = "0", features = [
 ] }
 tracing = "0"
 tracing-subscriber = { version = "0", features = ["env-filter"] }
-validator = { version = "0.18", features = ["derive"] }
+validator = { version = "0.19", features = ["derive"] }
 uuid = { version = "1", features = ["v7", "fast-rng", "serde"] }
 tokio = { version = "1", features = ["net", "rt-multi-thread", "signal"] }
 
