@@ -1,4 +1,15 @@
 - - -
+## 0.1.1 - 2024-11-05
+#### Bug Fixes
+- **(deps)** update rust crate thiserror to v1.0.68 (#12) - (faef289) - renovate[bot]
+- **(deps)** update rust crate validator to 0.19 (#11) - (3be6373) - renovate[bot]
+- **(deps)** update rust crate thiserror to v1.0.67 (#10) - (a435ea9) - renovate[bot]
+#### Continuous Integration
+- split release and build - (0e32a7d) - EgorHenek
+- fix binaries build (#13) - (b05fca5) - EgorHenek
+
+- - -
+
 ## 0.1.0 - 2024-11-05
 #### Bug Fixes
 - **(deps)** update rust crate thiserror to v1.0.66 (#5) - (2a3d2ef) - renovate[bot]
