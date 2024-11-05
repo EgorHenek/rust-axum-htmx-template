@@ -333,31 +333,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "bingo"
-version = "0.1.0"
-dependencies = [
- "axum",
- "axum-htmx",
- "axum-test",
- "bytes",
- "chrono",
- "config",
- "metrics",
- "metrics-exporter-prometheus",
- "minijinja",
- "mockall",
- "serde",
- "sqlx",
- "thiserror",
- "tokio",
- "tower-http",
- "tracing",
- "tracing-subscriber",
- "uuid",
- "validator",
-]
-
-[[package]]
 name = "bitflags"
 version = "2.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2170,6 +2145,31 @@ dependencies = [
  "spki",
  "subtle",
  "zeroize",
+]
+
+[[package]]
+name = "rust-axum-htmx-template"
+version = "0.1.0"
+dependencies = [
+ "axum",
+ "axum-htmx",
+ "axum-test",
+ "bytes",
+ "chrono",
+ "config",
+ "metrics",
+ "metrics-exporter-prometheus",
+ "minijinja",
+ "mockall",
+ "serde",
+ "sqlx",
+ "thiserror",
+ "tokio",
+ "tower-http",
+ "tracing",
+ "tracing-subscriber",
+ "uuid",
+ "validator",
 ]
 
 [[package]]

@@ -1,6 +1,6 @@
 use axum::http::StatusCode;
 use axum_test::TestServer;
-use bingo::{
+use rust_axum_htmx_template::{
     api::{
         asset_cache::AssetCache, controllers::variant_controller::CreateVariantRequest,
         router::create_router, state::AppState, BaseTemplateData,
