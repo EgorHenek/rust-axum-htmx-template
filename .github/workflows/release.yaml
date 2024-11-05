@@ -41,19 +41,19 @@ jobs:
           - arch: arm64
             target: aarch64-unknown-linux-gnu
             asset_name: ${{ github.event.repository.name }}-linux-arm64
+            command: cross
           - arch: amd64
             target: x86_64-unknown-linux-gnu
             asset_name: ${{ github.event.repository.name }}-linux-amd64
+            command: cargo
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-        with:
-          target: ${{ matrix.target }}
-      - name: Install arm64 dependencies
-        if: matrix.arch == 'arm64'
-        run: sudo apt-get -y install gcc-aarch64-linux-gnu libsqlite3-dev:arm64
       - name: Cache cargo registry
         uses: Swatinem/rust-cache@v2
+      - name: Install cross
+        if: matrix.command == 'cross'
+        run: cargo install cross --git https://github.com/cross-rs/cross
       - name: Install bun
         uses: oven-sh/setup-bun@v2
         with:
@@ -61,7 +61,7 @@ jobs:
       - name: Install js dependencies
         run: bun install
       - name: Build
-        run: cargo build --release --locked --target ${{ matrix.target }}
+        run: ${{ matrix.command }} build --release --locked --target ${{ matrix.target }}
       - name: Package
         shell: bash
         run: |
