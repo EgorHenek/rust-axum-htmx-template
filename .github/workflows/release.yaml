@@ -47,9 +47,9 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           target: ${{ matrix.target }}
-      - name: Install gcc-aarch64-linux-gnu
+      - name: Install arm64 dependencies
         if: matrix.arch == 'arm64'
-        run: sudo apt-get -y install gcc-aarch64-linux-gnu
+        run: sudo apt-get -y install gcc-aarch64-linux-gnu libsqlite3-dev:arm64
       - name: Cache cargo registry
         uses: Swatinem/rust-cache@v2
       - name: Install bun
