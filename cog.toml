@@ -2,8 +2,11 @@ ignore_merge_commits = false
 branch_whitelist = ["main"]
 skip_ci = "[skip ci]"
 skip_untracked = false
-pre_bump_hooks = []
-post_bump_hooks = []
+pre_bump_hooks = [
+    "cargo bump {{version}}",
+    "cargo update --workspace"
+]
+post_bump_hooks = ["git push", "git push origin {{version}}"]
 pre_package_bump_hooks = []
 post_package_bump_hooks = []
 
