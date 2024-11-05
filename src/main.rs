@@ -1,4 +1,6 @@
-use bingo::{config::load_config, setup_tracing, start_main_server, start_metrics_server};
+use rust_axum_htmx_template::{
+    config::load_config, setup_tracing, start_main_server, start_metrics_server,
+};
 
 #[tokio::main]
 async fn main() {

@@ -1,5 +1,5 @@
 [package]
-name = "bingo"
+name = "rust-axum-htmx-template"
 version = "0.1.0"
 edition = "2021"
 

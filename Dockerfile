@@ -12,9 +12,9 @@ COPY . /app
 RUN cargo build --release
 
 FROM gcr.io/distroless/cc-debian12
-COPY --from=build-env /app/target/release/bingo /
+COPY --from=build-env /app/target/release/rust-axum-htmx-template /
 
 EXPOSE 3000
 EXPOSE 3001
 
-CMD ["./bingo"]
+CMD ["./rust-axum-htmx-template"]

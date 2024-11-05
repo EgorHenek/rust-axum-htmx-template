@@ -64,7 +64,7 @@ jobs:
         shell: bash
         run: |
           cd target/${{ matrix.target }}/release
-          tar czvf ../../../pages-meta-${{ matrix.target }}.tar.gz ${{ github.event.repository.name }}
+          tar czvf ../../../${{github.event.repository.name}}-${{ matrix.target }}.tar.gz ${{ github.event.repository.name }}
           cd -
       - name: Upload Release Asset
         env:
@@ -106,7 +106,7 @@ jobs:
         shell: bash
         run: |
           cd target/${{ matrix.target }}/release
-          7z a ../../../pages-meta-${{ matrix.target }}.zip ${{ github.event.repository.name }}.exe
+          7z a ../../../${{ github.event.repository.name }}-${{ matrix.target }}.zip ${{ github.event.repository.name }}.exe
           cd -
       - name: Upload Release Asset
         env:
@@ -146,7 +146,7 @@ jobs:
         shell: bash
         run: |
           cd target/release
-          tar czvf ../../${{ github.event.repo.name }}-${{ matrix.target }}.tar.gz ${{ github.event.repository.name }}
+          tar czvf ../../${{ github.event.repository.name }}-${{ matrix.target }}.tar.gz ${{ github.event.repository.name }}
           cd -
       - name: Upload Release Asset
         env:
