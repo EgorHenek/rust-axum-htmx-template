@@ -44,4 +44,6 @@ panic = 'abort'
 debug = false
 
 [dev-dependencies]
-axum-test = ">= 0.7.6"
+tower = { version = "0.5", features = ["util"] }
+urlencoding = "2"
+mime = "0.3"
