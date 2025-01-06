@@ -1,13 +1,13 @@
-use axum::http::StatusCode;
-use axum_test::TestServer;
+use axum::{
+    body::Body,
+    http::{header, Method, Request, StatusCode},
+};
 use rust_axum_htmx_template::{
-    api::{
-        asset_cache::AssetCache, controllers::variant_controller::CreateVariantRequest,
-        router::create_router, state::AppState, BaseTemplateData,
-    },
+    api::{asset_cache::AssetCache, router::create_router, state::AppState, BaseTemplateData},
     import_templates, leak_alloc,
 };
 use sqlx::SqlitePool;
+use tower::ServiceExt;
 
 async fn setup_test_db() -> SqlitePool {
     let db_url = "sqlite::memory:";
@@ -35,15 +35,23 @@ async fn test_create_variant_integration() {
 
     let app = create_router().with_state(state);
 
-    // Создаем тестовый запрос
-    let server = TestServer::new(app).unwrap();
-
     // Отправляем запрос
-    let body = CreateVariantRequest {
-        title: "Test variant".to_string(),
-    };
-    let response = server.post("/variants/add").form(&body).await;
+    let form_body = format!("title={}", urlencoding::encode("Test variant"));
+    let response = app
+        .oneshot(
+            Request::builder()
+                .uri("/variants/add")
+                .method(Method::POST)
+                .header(
+                    header::CONTENT_TYPE,
+                    mime::APPLICATION_WWW_FORM_URLENCODED.as_ref(),
+                )
+                .body(Body::from(form_body))
+                .unwrap(),
+        )
+        .await
+        .unwrap();
 
     // Проверяем результат
-    assert_eq!(response.status_code(), StatusCode::CREATED);
+    assert_eq!(response.status(), StatusCode::CREATED);
 }
