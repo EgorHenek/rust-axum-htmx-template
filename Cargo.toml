@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 axum = { version = "0.8", features = ["tracing"] }
-axum-htmx = "0"
+axum-htmx = { version = "0", git = "https://github.com/EgorHenek/axum-htmx" }
 bytes = "1"
 config = "0"
 chrono = { version = "0", features = ["serde"] }
