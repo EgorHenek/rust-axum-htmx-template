@@ -21,7 +21,7 @@ impl<'a> SqliteVariantRepository<'a> {
     }
 }
 
-impl<'a> VariantRepository for SqliteVariantRepository<'a> {
+impl VariantRepository for SqliteVariantRepository<'_> {
     async fn create_variant(&self, content: Variant) -> Result<Variant, AppError> {
         let variant = sqlx::query_as!(
             Variant,
