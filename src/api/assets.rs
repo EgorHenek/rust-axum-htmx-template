@@ -12,7 +12,7 @@ use super::state::SharedState;
 pub fn static_file_handler(state: SharedState) -> Router {
     Router::new()
         .route(
-            "/:file",
+            "/{file}",
             get(|state: State<SharedState>, path: Path<String>| async move {
                 let Some(asset) = state.assets.get_from_path(&path) else {
                     return StatusCode::NOT_FOUND.into_response();
