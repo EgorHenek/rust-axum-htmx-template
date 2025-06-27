@@ -48,7 +48,7 @@ fn copy_files(dir: &str) {
         } else {
             let path = entry.path();
             let filename = path.file_name().unwrap().to_str().unwrap();
-            let dest = format!("build/{}", filename);
+            let dest = format!("build/{filename}");
 
             std::fs::copy(path, dest).expect("failed to copy file");
         }
