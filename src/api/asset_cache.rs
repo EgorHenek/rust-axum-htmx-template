@@ -34,14 +34,14 @@ impl AssetCache {
         let basename = parts.next().unwrap_or_default();
         let ext = parts.next_back().unwrap_or_default();
 
-        format!("{}.{}", basename, ext)
+        format!("{basename}.{ext}")
     }
 
     pub async fn load_files() -> Self {
         let mut cache = HashMap::default();
 
         let assets: Vec<_> = std::fs::read_dir("build")
-            .unwrap_or_else(|e| panic!("failed to read build directory: {}", e))
+            .unwrap_or_else(|e| panic!("failed to read build directory: {e}"))
             .filter_map(Result::ok)
             .filter_map(|file| {
                 let path = file.path();
