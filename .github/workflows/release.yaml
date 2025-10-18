@@ -17,7 +17,7 @@ jobs:
         run: cargo install cargo-bump
       - name: Semver release
         id: release
-        uses: oknozor/cocogitto-action@v3
+        uses: oknozor/cocogitto-action@v4
         with:
           release: true
           git-user: "github-actions[bot]"
