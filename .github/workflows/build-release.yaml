@@ -23,7 +23,7 @@ jobs:
             target: x86_64-unknown-linux-gnu
             asset_name: ${{ github.event.repository.name }}-linux-amd64
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Install arm64 dependencies
         if: matrix.arch == 'arm64'
         run: sudo apt-get -y install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libc6-dev-arm64-cross
@@ -67,7 +67,7 @@ jobs:
             target: aarch64-pc-windows-msvc
             asset_name: ${{ github.event.repository.name }}-windows-arm64.exe
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
         with:
           target: ${{ matrix.target }}
@@ -108,7 +108,7 @@ jobs:
             target: aarch64-apple-darwin
             arch: arm64
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
       - name: Cache cargo registry
         uses: Swatinem/rust-cache@v2
@@ -134,7 +134,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
