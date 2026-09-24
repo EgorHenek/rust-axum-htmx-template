@@ -14,7 +14,7 @@ metrics-exporter-prometheus = "0"
 minijinja = { version = "2", features = ["loader"] }
 mockall = "0"
 serde = { version = "1", features = ["derive"] }
-sqlx = { version = "0.8", features = [
+sqlx = { version = "0.9", features = [
   "runtime-tokio",
   "macros",
   "sqlite",
